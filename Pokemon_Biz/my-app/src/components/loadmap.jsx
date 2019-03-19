@@ -5,8 +5,21 @@ export class LoadMap extends Component {
   constructor(props) {
     super(props);
     this.changeLocation = this.changeLocation.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
     //10.883280, 106.781627
     this.state = { lat: 10.883280, lng: 106.781627 };
+  }
+
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.setState({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        });
+      }
+    );
   }
 
   changeLocation() {
@@ -19,7 +32,7 @@ export class LoadMap extends Component {
       width: "100%",
       height: "100%"
     };
-    console.log(this.props);
+    const marker = require('../pictures/Pokemondex.png');
     return (
       <div style={style}>
         <Map
@@ -29,8 +42,15 @@ export class LoadMap extends Component {
           onClick={this.changeLocation}
           zoom={17}
         >
-          <Marker 
+        
+          <Marker
+          icon={marker}
             position={this.state}
+          />
+
+          <Marker 
+            icon={marker}
+            position={ {lat: 10.883280, lng: 106.781627} }
           />
           <InfoWindow onClose={this.onInfoWindowClose} />
         </Map>
